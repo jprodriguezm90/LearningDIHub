@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Domain/">
+    <Project Path="LearningDIHub.Domain/LearningDIHub.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Persistance/" />
+  <Folder Name="/src/UI/">
+    <Project Path="LearningDIHub.Console/LearningDIHub.Console.csproj" />
+  </Folder>
+  <Folder Name="/test/" />
+</Solution>

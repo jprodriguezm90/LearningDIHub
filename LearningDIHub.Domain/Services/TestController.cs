@@ -1,0 +1,15 @@
+﻿using LearningDIHub.Domain.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace LearningDIHub.Domain.Services
+{
+    public class TestController(IMessageService a,IMessageService b)
+    {
+        public string Print()
+        {
+            return $"Message Service 1: {a.Id}, Message Service 2: {b.Id}";
+        }
+    }
+}
