@@ -1,7 +1,9 @@
-﻿using LearningDIHub.Domain.Contracts;
+﻿using LearningDIHub.Console;
+using LearningDIHub.Domain.Contracts;
 using LearningDIHub.Domain.Models;
 using LearningDIHub.Domain.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 Console.WriteLine("Hello, World!");
 
@@ -11,8 +13,8 @@ serviceCollection.AddTransient<MessageService>();
 serviceCollection.AddTransient<TestController>();
 serviceCollection.AddSingleton<IMessageService,MessageService>();
 
-serviceCollection.AddTransient<ISenderProvider, SMSProcessor>();
-serviceCollection.AddTransient<ISenderProvider, EmailProcessor>();
+serviceCollection.AddScoped<ISenderProvider, SMSProcessor>();
+serviceCollection.AddScoped<ISenderProvider, EmailProcessor>();
 
 serviceCollection.AddSingleton<A>();
 
@@ -43,4 +45,25 @@ Console.WriteLine(testController.Print());
 Console.WriteLine(a.Print());
 Console.WriteLine(b.Print());
 Console.WriteLine(a2.Print());
+
+
+
+var builder = Host.CreateDefaultBuilder(args)
+    .UseDefaultServiceProvider((_, options) =>
+    {
+        options.ValidateOnBuild = true;
+        options.ValidateScopes = true;
+    })
+    .ConfigureServices(services =>
+    {
+        services.AddHostedService<LearningHub>();
+
+        services.AddTransient<IMessageService,MessageService>();
+
+        services.AddScoped<ISenderProvider, EmailProcessor>();
+    });
+
+using var host = builder.Build();
+await host.RunAsync();
+
 
