@@ -97,7 +97,7 @@ var builder = Host.CreateDefaultBuilder(args)
 
         services.AddHttpClient("message", options =>
         {
-            options.BaseAddress = new Uri("");
+            options.BaseAddress = new Uri("https://raw.githubusercontent.com/jprodriguezm90/LearningDIHub/refs/heads/master/");
         });
         services.AddTransient<IHttpMessageSource, HttpMessageSource>();
 
