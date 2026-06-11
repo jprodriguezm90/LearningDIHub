@@ -8,6 +8,7 @@ namespace LearningDIHub.Domain.Services
 {
     public class EmailProcessor : ISenderProvider
     {
+        public int Id { get; } = 1;
         public string SenderProcessor(Message msg)
         {
             return $"The Message from {msg.From} to {msg.To} contains {msg.Body} was send by Email";

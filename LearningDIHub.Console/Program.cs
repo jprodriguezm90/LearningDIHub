@@ -2,6 +2,7 @@
 using LearningDIHub.Domain.Contracts;
 using LearningDIHub.Domain.Models;
 using LearningDIHub.Domain.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -20,8 +21,14 @@ serviceCollection.AddSingleton<IMessageService,MessageService>();
 serviceCollection.AddScoped<ISenderProvider, SMSProcessor>();
 serviceCollection.AddScoped<ISenderProvider, EmailProcessor>();
 
+IConfiguration config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
 
-serviceCollection.AddSingleton<A>();
+serviceCollection.AddOptions<ServiceSelector>().Bind(config.GetSection(ServiceSelector.SectionName));
+
+
+serviceCollection.AddTransient<A>();
 serviceCollection.AddScoped<B>();
 
 
@@ -55,7 +62,15 @@ Console.WriteLine(a.Print());
 Console.WriteLine(b.Print());
 Console.WriteLine(a2.Print());
 
+//Putting IDisposable in the classes A and B, didn't dispose the services, because we create the service ourselves
+b.Dispose();
+a.Dispose();
+a2.Dispose();
+messageService.Dispose();
+testController.Dispose();
+//As MessageService is IDisposable and is created by the Builder below, the Builder is responsible for disposing of it.
 
+Console.WriteLine(a.Print()); 
 
 //var builder = Host.CreateApplicationBuilder(args); Create simple Application to register services. 
 //Using Dependency Injection with HostBuilder and Default configuration as this will help introduce Validation of Captive Dependencies and Scopes.
@@ -66,7 +81,7 @@ var builder = Host.CreateDefaultBuilder(args)
         options.ValidateOnBuild = true;
         options.ValidateScopes = true; // This will throw an exception if we try to resolve a scoped service from a singleton, which is a common mistake that can lead to memory leaks and other issues.
     })
-    .ConfigureServices(services =>
+    .ConfigureServices((hostBuilderContext, services) =>
     {
         services.AddHostedService<LearningHub>();
 
@@ -77,15 +92,37 @@ var builder = Host.CreateDefaultBuilder(args)
         services.AddTransient<IMessageService,MessageService>();
 
         services.AddScoped<ISenderProvider, EmailProcessor>();
+
+        services.AddOptions<ServiceSelector>().Bind(hostBuilderContext.Configuration.GetSection(ServiceSelector.SectionName));
+
+        services.AddHttpClient("message", options =>
+        {
+            options.BaseAddress = new Uri("");
+        });
+        services.AddTransient<IHttpMessageSource, HttpMessageSource>();
+
+        /* This is another way to register the HttpClient and the HttpMessageSource, 
+         * but it's not recommended because it can lead to issues with the lifetimes of the services, 
+         * as the HttpMessageSource will be registered as transient and will be created every time it's resolved, 
+         * which can lead to issues with the HttpClient, as it will be created every time the HttpMessageSource is created,
+         * which can lead to issues with the performance and scalability of the application.
+        services
+            .AddHttpClient<IHttpMessageSource, HttpMessageSource>()
+            .ConfigureHttpClient((serviceProvider, options) =>
+            {
+                //var httpMessageSource = serviceProvider.GetRequiredService<IOptions<...>>(); EXERCISE
+
+                options.BaseAddress = new Uri("");
+            });
+
+        */
+
+
     });
 
 using var host = builder.Build();
 await host.RunAsync();
 
-//Putting IDisposable in the classes A and B, didn't dispose the services, because with create the service ourselves
-b.Dispose();
-a.Dispose();
-a2.Dispose();
-//As MessageService is IDisposable and is created by the Builder, the Builder is responsible for disposing of it.
+
 
 

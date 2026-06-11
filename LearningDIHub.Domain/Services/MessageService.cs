@@ -1,29 +1,34 @@
 ﻿using LearningDIHub.Domain.Contracts;
 using LearningDIHub.Domain.Models;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace LearningDIHub.Domain.Services
 {
-    public class MessageService : IMessageService , IDisposable
+    public class MessageService(IOptions<ServiceSelector> serviceSelector, IEnumerable<ISenderProvider> senderProvider) : IMessageService , IDisposable
     {
-        private readonly IEnumerable<ISenderProvider> _senderProvider;
 
         public Guid Id { get; } = Guid.NewGuid();
-        public MessageService(IEnumerable<ISenderProvider> sender)
-        {
-            _senderProvider = sender;
-        }
+
         public string SendMessage(Message msg)
         {
             var result = string.Empty;
             var count = 0;
-            foreach (var provider in _senderProvider)
+            foreach (var provider in senderProvider)
             {
-                result += $"Mensaje {count++}: {provider.SenderProcessor(msg)}\n";
+                if (IsServiceEnabled(provider))
+                    result += $"Mensaje {count++}: {provider.SenderProcessor(msg)}\n";
             }
             return result;
+        }
+
+        public bool IsServiceEnabled(ISenderProvider sender)
+        {
+            return sender.Id.Equals(serviceSelector.Value.SelectedService);
+           
         }
 
         public void Dispose()

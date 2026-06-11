@@ -8,7 +8,7 @@ using System.Text;
 
 namespace LearningDIHub.Console
 {
-    public class LearningHub(IHostApplicationLifetime applicationLifetime, IServiceProvider serviceProvider) : IHostedService
+    public class LearningHub(IHostApplicationLifetime applicationLifetime, IServiceProvider serviceProvider, IHttpMessageSource httpMessageSource) : IHostedService
     {
         public void Run()
         {
@@ -16,6 +16,7 @@ namespace LearningDIHub.Console
 
 
             var msg = new Message() { Id = Guid.NewGuid(), From = "Dani", To = "Juan", Body = "I Love You More" };
+            var msgFromHttp = httpMessageSource.GetMessage();
 
             using var serviceScope = serviceProvider.CreateScope();
             var messageService = serviceScope.ServiceProvider.GetRequiredService<IMessageService>();
@@ -24,7 +25,11 @@ namespace LearningDIHub.Console
 
             System.Console.WriteLine(messageResult);
 
-        
+            messageResult = messageService.SendMessage(msgFromHttp);
+
+            System.Console.WriteLine(messageResult);
+
+
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

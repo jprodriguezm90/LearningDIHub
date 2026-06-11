@@ -1,0 +1,21 @@
+﻿using LearningDIHub.Domain.Contracts;
+using LearningDIHub.Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.Json;
+
+namespace LearningDIHub.Domain.Services
+{
+    public class HttpMessageSource(IHttpClientFactory httpClientFactory) : IHttpMessageSource
+    {
+        private readonly HttpClient _httpClient = httpClientFactory.CreateClient("message");
+        public Message GetMessage()
+        {
+            //This is a antipattern, but we are doing it for simplicity. In real world, you should use async/await pattern.
+            var stream = _httpClient.GetStreamAsync("message.json").Result;
+            Message message = JsonSerializer.Deserialize<Message>(stream);
+            return message;
+        }
+    }
+}

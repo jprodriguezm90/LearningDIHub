@@ -6,11 +6,12 @@ namespace LearningDIHub.Domain.Services
 {
     public class B() : IDisposable
     {
-        public Guid Id { get; } = Guid.NewGuid();
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public void Dispose()
         {
             Console.WriteLine($"B Is Disposed {Id}");
+            Id = Guid.Empty;
         }
 
         public string Print()
