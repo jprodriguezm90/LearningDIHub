@@ -19,6 +19,7 @@ namespace LearningDIHub.Console
 
             using var serviceScope = serviceProvider.CreateScope();
             var messageService = serviceScope.ServiceProvider.GetRequiredService<IMessageService>();
+            System.Console.WriteLine($"Message Service Id: {messageService.Id}");
             var messageResult = messageService.SendMessage(msg);
 
             System.Console.WriteLine(messageResult);

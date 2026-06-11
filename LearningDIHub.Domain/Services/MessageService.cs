@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LearningDIHub.Domain.Services
 {
-    public class MessageService : IMessageService
+    public class MessageService : IMessageService , IDisposable
     {
         private readonly IEnumerable<ISenderProvider> _senderProvider;
 
@@ -24,6 +24,11 @@ namespace LearningDIHub.Domain.Services
                 result += $"Mensaje {count++}: {provider.SenderProcessor(msg)}\n";
             }
             return result;
+        }
+
+        public void Dispose()
+        {
+            Console.WriteLine($"MessageService Is Disposed {Id}");
         }
     }
 }
