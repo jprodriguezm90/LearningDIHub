@@ -8,15 +8,20 @@ using System.Text;
 
 namespace LearningDIHub.Console
 {
-    public class LearningHub(IHostApplicationLifetime applicationLifetime, IServiceProvider serviceProvider, IHttpMessageSource httpMessageSource) : IHostedService
+    public class LearningHub(IHostApplicationLifetime applicationLifetime, IServiceProvider serviceProvider, [FromKeyedServices(LearningHub.Source)]IMessageSource messageSource) : IHostedService
     {
+#if DEBUG
+        public const string Source = "http";
+#else
+        public const string Source = "http";
+#endif
         public void Run()
         {
             System.Console.WriteLine($"Starting Learning Process");
 
 
             var msg = new Message() { Id = Guid.NewGuid(), From = "Dani", To = "Juan", Body = "I Love You More" };
-            var msgFromHttp = httpMessageSource.GetMessage();
+            var msgFromHttp = messageSource.GetMessage();
 
             using var serviceScope = serviceProvider.CreateScope();
             var messageService = serviceScope.ServiceProvider.GetRequiredService<IMessageService>();

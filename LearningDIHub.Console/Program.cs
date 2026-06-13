@@ -99,7 +99,8 @@ var builder = Host.CreateDefaultBuilder(args)
         {
             options.BaseAddress = new Uri("https://raw.githubusercontent.com/jprodriguezm90/LearningDIHub/refs/heads/master/");
         });
-        services.AddTransient<IHttpMessageSource, HttpMessageSource>();
+        services.AddKeyedTransient<IMessageSource, HttpMessageSource>("http");
+        services.AddKeyedTransient<IMessageSource, DBMessageSource>("db");
 
         /* This is another way to register the HttpClient and the HttpMessageSource, 
          * but it's not recommended because it can lead to issues with the lifetimes of the services, 

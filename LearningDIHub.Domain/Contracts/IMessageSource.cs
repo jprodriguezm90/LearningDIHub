@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LearningDIHub.Domain.Contracts
 {
-    public interface IHttpMessageSource
+    public interface IMessageSource
     {
         Message GetMessage();
     }

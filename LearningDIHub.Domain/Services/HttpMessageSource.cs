@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace LearningDIHub.Domain.Services
 {
-    public class HttpMessageSource(IHttpClientFactory httpClientFactory) : IHttpMessageSource
+    public class HttpMessageSource(IHttpClientFactory httpClientFactory) : IMessageSource
     {
         private readonly HttpClient _httpClient = httpClientFactory.CreateClient("message");
         public Message GetMessage()
