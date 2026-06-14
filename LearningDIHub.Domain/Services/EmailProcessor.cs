@@ -1,4 +1,5 @@
-﻿using LearningDIHub.Domain.Contracts;
+﻿using LearningDIHub.Domain.Auditing;
+using LearningDIHub.Domain.Contracts;
 using LearningDIHub.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -6,12 +7,15 @@ using System.Text;
 
 namespace LearningDIHub.Domain.Services
 {
-    public class EmailProcessor : ISenderProvider
+    public class EmailProcessor(IAuditLogger<Message> auditLogger) : ISenderProvider
     {
         public int Id { get; } = 1;
+        public Principal _principal = new("EmailProcessor");
         public string SenderProcessor(Message msg)
         {
-            return $"The Message from {msg.From} to {msg.To} contains {msg.Body} was send by Email";
+
+            auditLogger.AuditUpdate(_principal, msg, "EmailSent");
+            return $"The Message from {msg.From} to {msg.To} contains {msg.Body} was sent by Email";
         }
     
     }

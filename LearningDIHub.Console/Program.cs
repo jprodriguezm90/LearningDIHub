@@ -1,4 +1,5 @@
 ﻿using LearningDIHub.Console;
+using LearningDIHub.Domain.Auditing;
 using LearningDIHub.Domain.Contracts;
 using LearningDIHub.Domain.Models;
 using LearningDIHub.Domain.Services;
@@ -30,6 +31,10 @@ serviceCollection.AddOptions<ServiceSelector>().Bind(config.GetSection(ServiceSe
 
 serviceCollection.AddTransient<A>();
 serviceCollection.AddScoped<B>();
+
+
+serviceCollection.AddSingleton(typeof(IAuditLogger<>), typeof(AuditLogger<>));
+
 
 
 var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -118,6 +123,12 @@ var builder = Host.CreateDefaultBuilder(args)
 
         */
 
+
+
+        //All Registration of type AuditLogger is done with one line
+        services.AddSingleton(typeof(IAuditLogger<>), typeof(AuditLogger<>));
+
+        services.AddSingleton<IAuditLogger<Message>, MessageAuditLogger>();
 
     });
 
