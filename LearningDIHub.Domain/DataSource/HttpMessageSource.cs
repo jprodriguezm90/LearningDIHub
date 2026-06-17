@@ -1,15 +1,17 @@
-﻿using LearningDIHub.Domain.Contracts;
-using LearningDIHub.Domain.Models;
+﻿using LearningDIHub.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 
-namespace LearningDIHub.Domain.Services
+namespace LearningDIHub.Domain.DataSource
 {
-    public class HttpMessageSource(IHttpClientFactory httpClientFactory) : IMessageSource
+    /*public class HttpMessageSource(IHttpClientFactory httpClientFactory) : IMessageSource
     {
-        private readonly HttpClient _httpClient = httpClientFactory.CreateClient("message");
+
+        private readonly HttpClient _httpClient = httpClientFactory.CreateClient("message");*/
+    public class HttpMessageSource(HttpClient _httpClient) : IMessageSource
+    {
         public Message GetMessage()
         {
             //This is a antipattern, but we are doing it for simplicity. In real world, you should use async/await pattern.

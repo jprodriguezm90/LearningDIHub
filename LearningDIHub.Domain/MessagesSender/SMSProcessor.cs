@@ -1,10 +1,9 @@
-﻿using LearningDIHub.Domain.Contracts;
-using LearningDIHub.Domain.Models;
+﻿using LearningDIHub.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LearningDIHub.Domain.Services
+namespace LearningDIHub.Domain.Contracts
 {
     public class SMSProcessor : ISenderProvider
     {

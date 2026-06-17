@@ -1,6 +1,9 @@
 ﻿using LearningDIHub.Console;
 using LearningDIHub.Domain.Auditing;
+using LearningDIHub.Domain.Circular;
 using LearningDIHub.Domain.Contracts;
+using LearningDIHub.Domain.DataSource;
+using LearningDIHub.Domain.MessagesSender;
 using LearningDIHub.Domain.Models;
 using LearningDIHub.Domain.Services;
 using Microsoft.Extensions.Configuration;
@@ -14,27 +17,14 @@ Console.WriteLine("Hello, World!");
 
 var serviceCollection = new ServiceCollection();
 
-serviceCollection.AddTransient<MessageService>();
-serviceCollection.AddTransient<TestController>();
-serviceCollection.AddSingleton<IMessageService,MessageService>();
-
-//Testing multiple implementations of the same interface
-serviceCollection.AddScoped<ISenderProvider, SMSProcessor>();
-serviceCollection.AddScoped<ISenderProvider, EmailProcessor>();
 
 IConfiguration config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .Build();
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-serviceCollection.AddOptions<ServiceSelector>().Bind(config.GetSection(ServiceSelector.SectionName));
-
-
-serviceCollection.AddTransient<A>();
-serviceCollection.AddScoped<B>();
-
-
-serviceCollection.AddSingleton(typeof(IAuditLogger<>), typeof(AuditLogger<>));
-
+serviceCollection
+    .AddMessageServices(config)
+    .AddAuditingServices();
 
 
 var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -90,50 +80,40 @@ var builder = Host.CreateDefaultBuilder(args)
     {
         services.AddHostedService<LearningHub>();
 
-        //Note. you can't rely on ValidateScopes, because if you register a service as singleton,
-        //it will be resolved as singleton even if it has a scoped dependency,
-        //and this will not throw an exception until you try to resolve the service, which can lead to runtime errors.
-        //So it's important to be careful when registering services and to avoid registering services with incompatible lifetimes.
-        services.AddTransient<IMessageService,MessageService>();
 
-        services.AddScoped<ISenderProvider, EmailProcessor>();
-
-        services.AddOptions<ServiceSelector>().Bind(hostBuilderContext.Configuration.GetSection(ServiceSelector.SectionName));
-
-        services.AddHttpClient("message", options =>
-        {
-            options.BaseAddress = new Uri("https://raw.githubusercontent.com/jprodriguezm90/LearningDIHub/refs/heads/master/");
-        });
-        services.AddKeyedTransient<IMessageSource, HttpMessageSource>("http");
-        services.AddKeyedTransient<IMessageSource, DBMessageSource>("db");
-
-        /* This is another way to register the HttpClient and the HttpMessageSource, 
-         * but it's not recommended because it can lead to issues with the lifetimes of the services, 
-         * as the HttpMessageSource will be registered as transient and will be created every time it's resolved, 
-         * which can lead to issues with the HttpClient, as it will be created every time the HttpMessageSource is created,
-         * which can lead to issues with the performance and scalability of the application.
         services
-            .AddHttpClient<IHttpMessageSource, HttpMessageSource>()
-            .ConfigureHttpClient((serviceProvider, options) =>
-            {
-                //var httpMessageSource = serviceProvider.GetRequiredService<IOptions<...>>(); EXERCISE
-
-                options.BaseAddress = new Uri("");
-            });
-
-        */
-
-
-
-        //All Registration of type AuditLogger is done with one line
-        services.AddSingleton(typeof(IAuditLogger<>), typeof(AuditLogger<>));
-
-        services.AddSingleton<IAuditLogger<Message>, MessageAuditLogger>();
+            .AddMessageSelectorServices(hostBuilderContext.Configuration)
+            .AddDataServices(hostBuilderContext.Configuration)
+            .AddAuditingServices();
 
     });
 
 using var host = builder.Build();
 await host.RunAsync();
+
+
+
+
+
+var circularServiceCollection = new ServiceCollection();
+
+//Calling extensions of registrations
+circularServiceCollection
+    .AddLazyCircularRegistration()
+    .AddFuncCircularRegistration();
+
+
+var circularServiceProvider = circularServiceCollection.BuildServiceProvider();
+
+var firstClass = circularServiceProvider.GetRequiredService<FirstClass>();
+
+firstClass.DoIt();
+
+var firstClassFunc = circularServiceProvider.GetRequiredService<FirstClassFunc>();
+
+firstClassFunc.DoIt();
+
+
 
 
 

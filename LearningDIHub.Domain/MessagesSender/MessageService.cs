@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace LearningDIHub.Domain.Services
+namespace LearningDIHub.Domain.MessagesSender
 {
     public class MessageService(IOptions<ServiceSelector> serviceSelector, IEnumerable<ISenderProvider> senderProvider) : IMessageService , IDisposable
     {

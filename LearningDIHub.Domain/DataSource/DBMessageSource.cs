@@ -1,7 +1,6 @@
-﻿using LearningDIHub.Domain.Contracts;
-using LearningDIHub.Domain.Models;
+﻿using LearningDIHub.Domain.Models;
 
-namespace LearningDIHub.Domain.Services
+namespace LearningDIHub.Domain.DataSource
 {
     public class DBMessageSource() : IMessageSource
     {

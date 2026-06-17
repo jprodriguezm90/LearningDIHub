@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LearningDIHub.Domain.Contracts
+namespace LearningDIHub.Domain.DataSource
 {
     public interface IMessageSource
     {

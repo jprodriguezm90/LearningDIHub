@@ -1,11 +1,10 @@
 ﻿using LearningDIHub.Domain.Auditing;
-using LearningDIHub.Domain.Contracts;
 using LearningDIHub.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LearningDIHub.Domain.Services
+namespace LearningDIHub.Domain.Contracts
 {
     public class EmailProcessor(IAuditLogger<Message> auditLogger) : ISenderProvider
     {
