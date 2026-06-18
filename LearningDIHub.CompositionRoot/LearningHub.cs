@@ -4,12 +4,11 @@ using LearningDIHub.Domain.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace LearningDIHub.Console
+namespace LearningDIHub.CompositionRoot
 {
-    public class LearningHub(IHostApplicationLifetime applicationLifetime, IServiceProvider serviceProvider, [FromKeyedServices(LearningHub.Source)]IMessageSource messageSource) : IHostedService
+    public class LearningHub(IHostApplicationLifetime applicationLifetime, IServiceProvider serviceProvider
+        , [FromKeyedServices(LearningHub.Source)]IMessageSource messageSource) : IHostedService
     {
 #if DEBUG
         public const string Source = "http";

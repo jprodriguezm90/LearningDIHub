@@ -1,8 +1,6 @@
-﻿using LearningDIHub.Console;
+﻿using LearningDIHub.CompositionRoot;
 using LearningDIHub.Domain.Auditing;
 using LearningDIHub.Domain.Circular;
-using LearningDIHub.Domain.Contracts;
-using LearningDIHub.Domain.DataSource;
 using LearningDIHub.Domain.MessagesSender;
 using LearningDIHub.Domain.Models;
 using LearningDIHub.Domain.Services;
@@ -78,13 +76,11 @@ var builder = Host.CreateDefaultBuilder(args)
     })
     .ConfigureServices((hostBuilderContext, services) =>
     {
-        services.AddHostedService<LearningHub>();
-
-
-        services
-            .AddMessageSelectorServices(hostBuilderContext.Configuration)
-            .AddDataServices(hostBuilderContext.Configuration)
-            .AddAuditingServices();
+        //Composition Root 
+        services.AddLearningHub(hostBuilderContext.Configuration, config =>
+        {
+            config.RegisterAsHostedService = true;
+        });
 
     });
 

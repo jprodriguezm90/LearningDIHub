@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/" />
   <Folder Name="/src/Domain/">
+    <Project Path="LearningDIHub.CompositionRoot/LearningDIHub.CompositionRoot.csproj" />
     <Project Path="LearningDIHub.Domain/LearningDIHub.Domain.csproj" />
   </Folder>
   <Folder Name="/src/UI/">
