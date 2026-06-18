@@ -1,9 +1,8 @@
-﻿using LearningDIHub.Domain.Contracts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LearningDIHub.Domain.Services
+namespace LearningDIHub.MessageSender
 {
     public class TestController(IMessageService a,IMessageService b) : IDisposable
     {

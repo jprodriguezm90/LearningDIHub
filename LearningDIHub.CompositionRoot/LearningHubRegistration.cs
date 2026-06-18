@@ -1,6 +1,6 @@
-﻿using LearningDIHub.Domain.Auditing;
-using LearningDIHub.Domain.DataSource;
-using LearningDIHub.Domain.MessagesSender;
+﻿using LearningDIHub.Auditing;
+using LearningDIHub.DataSource;
+using LearningDIHub.MessageSender;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

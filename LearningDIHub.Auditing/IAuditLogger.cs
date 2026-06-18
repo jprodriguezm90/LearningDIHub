@@ -1,4 +1,4 @@
-﻿namespace LearningDIHub.Domain.Auditing
+﻿namespace LearningDIHub.Auditing
 {
     public interface IAuditLogger<TObject>
     {

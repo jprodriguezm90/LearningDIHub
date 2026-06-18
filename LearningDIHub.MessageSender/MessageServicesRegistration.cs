@@ -1,18 +1,17 @@
-﻿using LearningDIHub.Domain.Auditing;
-using LearningDIHub.Domain.Contracts;
-using LearningDIHub.Domain.Models;
+﻿using LearningDIHub.Domain.Models;
 using LearningDIHub.Domain.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Scrutor;
 
-namespace LearningDIHub.Domain.MessagesSender
+namespace LearningDIHub.MessageSender
 {
     public static class MessageServicesRegistration
     {
 
         public static IServiceCollection AddMessageServices(this IServiceCollection services, IConfiguration config)
         {
-            services.AddTransient<MessageService>();
+            /*services.AddTransient<MessageService>();
             services.AddTransient<TestController>();
             services.AddSingleton<IMessageService, MessageService>();
 
@@ -20,10 +19,25 @@ namespace LearningDIHub.Domain.MessagesSender
             services.AddScoped<ISenderProvider, SMSProcessor>();
             services.AddScoped<ISenderProvider, EmailProcessor>();
 
-            services.AddOptions<ServiceSelector>().Bind(config.GetSection(ServiceSelector.SectionName));
-
             services.AddTransient<A>();
             services.AddScoped<B>();
+            */
+            services.Scan(scanner => scanner.FromAssemblyOf<ISenderProvider>()
+                .AddClasses(c => c.WithAttribute<AsSingletonAtribute>())
+                .AsImplementedInterfaces()
+                .AsSelf()
+                .WithSingletonLifetime());
+
+            services.Scan(scanner => scanner.FromAssemblyOf<ISenderProvider>()
+                .AddClasses()
+                .UsingRegistrationStrategy(RegistrationStrategy.Skip) // Skip already registered services to avoid conflicts with singleton services
+                .AsImplementedInterfaces()
+                .AsSelf()
+                .WithScopedLifetime());
+
+            services.AddOptions<ServiceSelector>().Bind(config.GetSection(ServiceSelector.SectionName));
+
+            
 
             return services;
         }
@@ -42,4 +56,5 @@ namespace LearningDIHub.Domain.MessagesSender
             return services;
         }
     }
+    public sealed class AsSingletonAtribute : Attribute {}
 }

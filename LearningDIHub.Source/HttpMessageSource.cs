@@ -1,10 +1,7 @@
 ﻿using LearningDIHub.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Json;
 
-namespace LearningDIHub.Domain.DataSource
+namespace LearningDIHub.DataSource
 {
     /*public class HttpMessageSource(IHttpClientFactory httpClientFactory) : IMessageSource
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace LearningDIHub.Domain.Auditing
+namespace LearningDIHub.Auditing
 {
     public sealed class AuditLogger<TObject> : IAuditLogger<TObject>
     {

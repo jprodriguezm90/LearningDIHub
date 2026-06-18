@@ -1,13 +1,13 @@
-﻿using LearningDIHub.Domain.Contracts;
-using LearningDIHub.Domain.Models;
+﻿using LearningDIHub.Domain.Models;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace LearningDIHub.Domain.MessagesSender
+namespace LearningDIHub.MessageSender
 {
+    [AsSingletonAtribute]
     public class MessageService(IOptions<ServiceSelector> serviceSelector, IEnumerable<ISenderProvider> senderProvider) : IMessageService , IDisposable
     {
 

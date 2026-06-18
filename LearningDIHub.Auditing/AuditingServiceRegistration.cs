@@ -1,7 +1,7 @@
 ﻿using LearningDIHub.Domain.Models;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LearningDIHub.Domain.Auditing
+namespace LearningDIHub.Auditing
 {
     public static class AuditingServiceRegistration
     {

@@ -1,9 +1,6 @@
 ﻿using LearningDIHub.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace LearningDIHub.Domain.DataSource
+namespace LearningDIHub.DataSource
 {
     public interface IMessageSource
     {

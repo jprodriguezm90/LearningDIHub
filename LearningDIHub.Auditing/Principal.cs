@@ -1,4 +1,4 @@
-﻿namespace LearningDIHub.Domain.Auditing
+﻿namespace LearningDIHub.Auditing
 {
     public sealed record Principal(string DisplayName);
 }

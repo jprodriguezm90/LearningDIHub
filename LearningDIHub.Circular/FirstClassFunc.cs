@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LearningDIHub.Domain.Circular
+namespace LearningDIHub.Circular
 {
     public sealed class FirstClassFunc
     {

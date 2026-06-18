@@ -1,7 +1,7 @@
 ﻿using LearningDIHub.Domain.Models;
 using System.Text.Json;
 
-namespace LearningDIHub.Domain.Auditing
+namespace LearningDIHub.Auditing
 {
     public sealed class MessageAuditLogger : IAuditLogger<Message>
     {

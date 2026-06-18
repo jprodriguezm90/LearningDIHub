@@ -1,10 +1,16 @@
 <Solution>
   <Folder Name="/src/" />
   <Folder Name="/src/Domain/">
-    <Project Path="LearningDIHub.CompositionRoot/LearningDIHub.CompositionRoot.csproj" />
     <Project Path="LearningDIHub.Domain/LearningDIHub.Domain.csproj" />
   </Folder>
+  <Folder Name="/src/Infraestructure/">
+    <Project Path="LearningDIHub.Auditing/LearningDIHub.Auditing.csproj" Id="6520bb7c-9c6b-44d3-a65e-2f6f127bbd09" />
+    <Project Path="LearningDIHub.Circular/LearningDIHub.Circular.csproj" Id="1c91e6b3-4f0c-43ef-8dba-5638290da61f" />
+    <Project Path="LearningDIHub.MessageSender/LearningDIHub.MessageSender.csproj" Id="347b5cf3-00c3-4f17-8b10-2339741fa9b2" />
+    <Project Path="LearningDIHub.Source/LearningDIHub.Source.csproj" Id="40edf89c-9d1a-466b-9dd6-59c60deeaa66" />
+  </Folder>
   <Folder Name="/src/UI/">
+    <Project Path="LearningDIHub.CompositionRoot/LearningDIHub.CompositionRoot.csproj" />
     <Project Path="LearningDIHub.Console/LearningDIHub.Console.csproj" />
   </Folder>
   <Folder Name="/test/">

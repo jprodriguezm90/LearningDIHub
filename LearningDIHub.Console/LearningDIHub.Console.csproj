@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LearningDIHub.Circular\LearningDIHub.Circular.csproj" />
     <ProjectReference Include="..\LearningDIHub.CompositionRoot\LearningDIHub.CompositionRoot.csproj" />
   </ItemGroup>
 

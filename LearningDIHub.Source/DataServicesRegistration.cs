@@ -1,16 +1,8 @@
-﻿using LearningDIHub.Domain.Auditing;
-using LearningDIHub.Domain.Contracts;
-using LearningDIHub.Domain.MessagesSender;
-using LearningDIHub.Domain.Models;
-using LearningDIHub.Domain.Services;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace LearningDIHub.Domain.DataSource
+namespace LearningDIHub.DataSource
 {
     public static class DataServicesRegistration
     {

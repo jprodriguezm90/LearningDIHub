@@ -1,7 +1,7 @@
 ﻿using LearningDIHub.CompositionRoot;
-using LearningDIHub.Domain.Auditing;
-using LearningDIHub.Domain.Circular;
-using LearningDIHub.Domain.MessagesSender;
+using LearningDIHub.Auditing;
+using LearningDIHub.Circular;
+using LearningDIHub.MessageSender;
 using LearningDIHub.Domain.Models;
 using LearningDIHub.Domain.Services;
 using Microsoft.Extensions.Configuration;

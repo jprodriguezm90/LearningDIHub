@@ -1,6 +1,6 @@
 ﻿using LearningDIHub.Domain.Models;
 
-namespace LearningDIHub.Domain.DataSource
+namespace LearningDIHub.DataSource
 {
     public class DBMessageSource() : IMessageSource
     {
