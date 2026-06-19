@@ -2,102 +2,76 @@
 
 ## Overview
 
-LearningDIHub is a playground project created to explore and understand Dependency Injection concepts in .NET.
+LearningDIHub is a playground to explore Dependency Injection patterns and behaviors using .NET (target: .NET 10). It contains small experiments that demonstrate service registration patterns, lifetimes, decorators, keyed/keyed-typed registrations, and strategies for handling circular dependencies.
 
-The main goal of this repository is to practice how object creation, service resolution, and dependency lifetimes work behind the scenes while building small experiments and examples.
+## Projects in the solution
 
----
+- LearningDIHub.Console — Console entrypoint and samples (appsettings.json included).
+- LearningDIHub.CompositionRoot — Central composition helpers and a LearningHub hosted service.
+- LearningDIHub.MessageSender — Message sending implementations, decorators, and registration helpers.
+- LearningDIHub.Source (DataSource) — IMessageSource implementations: HttpMessageSource and DBMessageSource and typed HttpClient registration.
+- LearningDIHub.Auditing — Generic audit logger and message audit logger registration.
+- LearningDIHub.Circular — Examples of circular dependency handling using Lazy<T> and Func<T>.
+- LearningDIHub.Domain — Domain models and configuration objects used across the solution.
 
-## Goals
+## Concepts covered
 
-This project was created to:
+- Constructor injection and service resolution
+- Service lifetimes: Singleton, Scoped, Transient
+- Multiple implementations & IEnumerable<T> injection
+- ServiceDecorator (Scrutor) usage
+- Options pattern and typed HttpClient
+- Keyed/typed registrations for IMessageSource
+- Circular dependency patterns with Lazy<T> and Func<T>
+- Hosted service composition and IHostBuilder integration
+- Generic auditing with IAuditLogger<T>
 
-* Learn Dependency Injection fundamentals
-* Understand Service Lifetimes
-* Practice Service Registration and Resolution
-* Explore Multiple Implementations
-* Experiment with Object Composition
-* Improve understanding of .NET application architecture
+## Experiments and examples
 
----
+- AddSimpleMessageServices / AddMessageServices: different registration strategies for IMessageService and ISenderProvider implementations.
+- ServiceSelector options to choose a provider at runtime (configured via appsettings.json).
+- MessageServiceLoggingDecorator demonstrates decorating a service to add cross-cutting concerns.
+- DataSource demonstrates registering a typed HttpClient and keyed IMessageSource implementations ("http", "db").
+- Circular shows how to resolve circular dependencies safely using Lazy<T> and Func<T>.
+- CompositionRoot exposes AddLearningHub to wire up the full set of services and optionally register LearningHub as an IHostedService.
 
-## Concepts Covered
+## Configuration (appsettings.json)
 
-### Dependency Injection
+The Console project contains an appsettings.json with keys that the examples consume:
 
-* Constructor Injection
-* Service Registration
-* Service Resolution
-* Service Collections
-* Service Providers
+- MessageService:SelectedService — identifier used by ServiceSelector to enable a specific ISenderProvider.
+- MessageSource:URI — base URI used by the typed HttpClient for the HttpMessageSource.
 
-### Service Lifetimes
+Example (LearningDIHub.Console/appsettings.json):
 
-* Singleton
-* Scoped
-* Transient
-
-### Advanced DI Concepts
-
-* Multiple Implementations
-* IEnumerable Injection
-* Circular Dependencies
-* Captive Dependencies
-* Lifetime Validation
-
----
-
-## Project Structure
-
-```text
-LearningDIHub.Presentation
-│
-├── Controllers
-├── Program.cs
-
-LearningDIHub.Domain
-│
-├── Contracts
-├── Services
-├── Models
-
-LearningDIHub.Data
-│
-├── Persistence
-├── Providers
+```json
+{
+  "MessageService:SelectedService": "1",
+  "MessageSource:URI": "https://raw.githubusercontent.com/jprodriguezm90/LearningDIHub/refs/heads/master/"
+}
 ```
 
----
+## How to run
 
-## Experiments
+Restore and run the console sample (runs several DI experiments and then starts a hosted LearningHub):
 
-Some examples implemented in this project:
+1. Restore & build the solution
 
-* Registering multiple implementations of the same interface
-* Testing Singleton vs Scoped vs Transient behavior
-* Exploring circular dependency scenarios
-* Understanding how ASP.NET Core resolves services
-* Creating services manually using ServiceCollection
-* Using Dependency Injection inside ASP.NET Core Web Applications
+   ```bash
+   dotnet restore
+   dotnet build
+   ```
 
----
+2. Run the console project
 
-## Running the Project
+   ```bash
+   dotnet run --project LearningDIHub.Console
+   ```
 
-Clone repository:
+The console application demonstrates manual ServiceCollection usage, lifetime behavior, circular dependency experiments, and then builds an IHost that can register and run the LearningHub hosted service.
 
-```bash
-git clone <repository-url>
-```
+## Notes
 
-Run:
-
-```bash
-dotnet run
-```
-
----
-
-## Purpose
-
-This repository is intended for learning, experimentation, and interview preparation rather than production usage.
+- Target framework: .NET 10
+- This repository is intended for learning and experimentation, not production usage.
+- See source code for concrete examples and additional comments in registration helper classes (CompositionRoot, MessageServicesRegistration, DataServicesRegistration, Circular registrations, etc.).
