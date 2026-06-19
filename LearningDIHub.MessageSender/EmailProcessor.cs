@@ -6,6 +6,7 @@ using System.Text;
 
 namespace LearningDIHub.MessageSender
 {
+    [AsTransient]
     public class EmailProcessor(IAuditLogger<Message> auditLogger) : ISenderProvider
     {
         public int Id { get; } = 1;

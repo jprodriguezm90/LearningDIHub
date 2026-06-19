@@ -5,6 +5,7 @@ using System.Text;
 
 namespace LearningDIHub.MessageSender
 {
+    [AsTransient]
     public class SMSProcessor : ISenderProvider
     {
         public int Id { get; } = 2;
