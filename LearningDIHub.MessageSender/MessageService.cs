@@ -7,8 +7,8 @@ using System.Text;
 
 namespace LearningDIHub.MessageSender
 {
-    [AsSingletonAtribute]
-    public class MessageService(IOptions<ServiceSelector> serviceSelector, IEnumerable<ISenderProvider> senderProvider) : IMessageService , IDisposable
+    [AsTransient]
+    public class MessageService(IOptions<ServiceSelector> serviceSelector, IEnumerable<ISenderProvider> senderProvider) : IMessageService 
     {
 
         public Guid Id { get; } = Guid.NewGuid();

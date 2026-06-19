@@ -1,9 +1,11 @@
-﻿using System;
+﻿using LearningDIHub.MessageSender;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LearningDIHub.Domain.Services
 {
+    [DoNotRegister]
     public class B() : IDisposable
     {
         public Guid Id { get; set; } = Guid.NewGuid();

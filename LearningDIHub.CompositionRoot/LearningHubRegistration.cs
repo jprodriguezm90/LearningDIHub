@@ -23,7 +23,7 @@ namespace LearningDIHub.CompositionRoot
             }
 
             services
-            .AddMessageSelectorServices(configuration)
+            .AddMessageServices(configuration)
             .AddDataServices(configuration)
             .AddAuditingServices();
             return services;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LearningDIHub.MessageSender
 {
-    public interface IMessageService
+    public interface IMessageService : IDisposable
     {
         public Guid Id { get; }
         public string SendMessage(Message msg);

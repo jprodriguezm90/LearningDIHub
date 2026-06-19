@@ -4,6 +4,7 @@ using System.Text;
 
 namespace LearningDIHub.MessageSender
 {
+    [DoNotRegister]
     public class TestController(IMessageService a,IMessageService b) : IDisposable
     {
         public void Dispose()

@@ -11,25 +11,14 @@ namespace LearningDIHub.MessageSender
 
         public static IServiceCollection AddMessageServices(this IServiceCollection services, IConfiguration config)
         {
-            /*services.AddTransient<MessageService>();
-            services.AddTransient<TestController>();
-            services.AddSingleton<IMessageService, MessageService>();
-
-            //Testing multiple implementations of the same interface
-            services.AddScoped<ISenderProvider, SMSProcessor>();
-            services.AddScoped<ISenderProvider, EmailProcessor>();
-
-            services.AddTransient<A>();
-            services.AddScoped<B>();
-            */
             services.Scan(scanner => scanner.FromAssemblyOf<ISenderProvider>()
-                .AddClasses(c => c.WithAttribute<AsSingletonAtribute>())
+                .AddClasses(c => c.WithAttribute<AsTransientAttribute>())
                 .AsImplementedInterfaces()
                 .AsSelf()
-                .WithSingletonLifetime());
+                .WithTransientLifetime());
 
             services.Scan(scanner => scanner.FromAssemblyOf<ISenderProvider>()
-                .AddClasses()
+                .AddClasses(c => c.WithoutAttribute<DoNotRegisterAttribute>())
                 .UsingRegistrationStrategy(RegistrationStrategy.Skip) // Skip already registered services to avoid conflicts with singleton services
                 .AsImplementedInterfaces()
                 .AsSelf()
@@ -37,7 +26,26 @@ namespace LearningDIHub.MessageSender
 
             services.AddOptions<ServiceSelector>().Bind(config.GetSection(ServiceSelector.SectionName));
 
+            services.Decorate<IMessageService, MessageServiceLoggingDecorator>();
+
+            return services;
+        }
+        public static IServiceCollection AddSimpleMessageServices(this IServiceCollection services, IConfiguration config)
+        {
+            services.AddTransient<MessageService>();
+            services.AddTransient<TestController>();
+            services.AddTransient<IMessageService, MessageService>();
+
+            //Testing multiple implementations of the same interface
+            services.AddScoped<ISenderProvider, SMSProcessor>();
+            services.AddScoped<ISenderProvider, EmailProcessor>();
+
+            services.AddTransient<A>();
+            services.AddScoped<B>();
             
+
+            services.AddOptions<ServiceSelector>().Bind(config.GetSection(ServiceSelector.SectionName));
+
 
             return services;
         }
@@ -56,5 +64,7 @@ namespace LearningDIHub.MessageSender
             return services;
         }
     }
-    public sealed class AsSingletonAtribute : Attribute {}
+    public sealed class AsSingletonAttribute : Attribute {}
+    public sealed class DoNotRegisterAttribute : Attribute {}
+    public sealed class AsTransientAttribute : Attribute { }
 }

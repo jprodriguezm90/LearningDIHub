@@ -21,7 +21,7 @@ IConfiguration config = new ConfigurationBuilder()
                 .Build();
 
 serviceCollection
-    .AddMessageServices(config)
+    .AddSimpleMessageServices(config)
     .AddAuditingServices();
 
 
