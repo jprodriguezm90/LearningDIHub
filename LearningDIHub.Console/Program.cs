@@ -76,14 +76,29 @@ var builder = Host.CreateDefaultBuilder(args)
     })
     .ConfigureServices((hostBuilderContext, services) =>
     {
-        //Composition Root 
-        services.AddLearningHub(hostBuilderContext.Configuration, config =>
+        // Composition Root
+        services.AddLearningHub(config, learningHubConfig =>
         {
-            config.RegisterAsHostedService = true;
+            learningHubConfig.RegisterAsHostedService = true;
         });
-
     });
-
+/*
+    .ConfigureAppConfiguration((hostingContext, configBuilder) =>
+    {
+        // Merge the manually built `config` into the Host configuration so
+        // `hostBuilderContext.Configuration` contains the same values.
+        configBuilder.AddConfiguration(config);
+    })
+    .ConfigureServices((hostBuilderContext, services) =>
+    {
+        // Composition Root
+        // Prefer hostBuilderContext.Configuration here, it now contains `config` as well.
+        services.AddLearningHub(hostBuilderContext.Configuration, learningHubConfig =>
+        {
+            learningHubConfig.RegisterAsHostedService = true;
+        });
+    });
+*/
 using var host = builder.Build();
 await host.RunAsync();
 
